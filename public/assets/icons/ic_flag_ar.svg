@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<svg width="28" height="20" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+ <defs>
+  <path d="m0,6.67l28,0l0,6.66l-28,0l0,-6.66z" id="a"/>
+  <filter height="145%" id="b" width="110.7%" x="-5.4%" y="-22.5%">
+   <feMorphology in="SourceAlpha" operator="dilate" radius="0.5"/>
+   <feOffset in="shadowSpreadOuter1" result="shadowOffsetOuter1"/>
+   <feColorMatrix in="shadowOffsetOuter1" values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.06 0"/>
+  </filter>
+  <path d="m0,13.33l28,0l0,6.67l-28,0l0,-6.67z" id="c"/>
+  <filter height="145%" id="d" width="110.7%" x="-5.4%" y="-22.5%">
+   <feMorphology in="SourceAlpha" operator="dilate" radius="0.5"/>
+   <feOffset in="shadowSpreadOuter1" result="shadowOffsetOuter1"/>
+   <feColorMatrix in="shadowOffsetOuter1" values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.06 0"/>
+  </filter>
+  <mask id="e">
+   <rect fill="#fff" fill-rule="evenodd" height="20" id="svg_1" rx="3" width="28"/>
+  </mask>
+ </defs>
+ <g class="layer">
+  <title>Layer 1</title>
+  <g fill="none" fill-rule="evenodd" id="svg_2">
+   <path d="m0,0l28,0l0,6.67l-28,0l0,-6.67z" fill="#74acdf" id="svg_3" mask="url(#e)"/>
+   <g id="svg_4" mask="url(#e)" transform="matrix(1 0 0 1 0 0)">
+    <use fill="#000" filter="url(#b)" id="svg_5" xlink:href="#a"/>
+    <use fill="#ffffff" id="svg_6" xlink:href="#a"/>
+   </g>
+   <g id="svg_7" mask="url(#e)">
+    <use fill="#000" filter="url(#d)" id="svg_8" xlink:href="#c"/>
+    <use fill="#74acdf" id="svg_9" xlink:href="#c"/>
+   </g>
+   <polyline fill="none" id="svg_12" points="4.71875,6.125 5.619541645050049,6.357041835784912 6.4926252365112305,6.4375 " stroke-linecap="round"/>
+   <line fill="none" id="svg_13" stroke-linecap="round" x1="1.63" x2="6.91" y1="10.13" y2="10.16"/>
+   <line fill="none" id="svg_14" opacity="0.5" stroke-linecap="round" x1="4.81" x2="4.81" y1="4.13" y2="4.13"/>
+  </g>
+ </g>
+</svg>
