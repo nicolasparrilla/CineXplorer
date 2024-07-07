@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { TextField, InputAdornment, IconButton, Stack, Link } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
-import { useAuth } from '../../../AuthContext'; // Importa el contexto de autenticación
+import { useAuth } from '../../../AuthContext';
 import Iconify from '../../../components/iconify';
 
 export default function LoginForm() {
   const navigate = useNavigate();
-  const { handleLogin } = useAuth(); // Usa el hook useAuth para acceder a las funciones de autenticación
+  const { handleLogin } = useAuth();
 
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState('');
@@ -51,7 +51,6 @@ export default function LoginForm() {
   };
 
   const isValidEmail = (email) => {
-    // Expresión regular para validar el formato de correo electrónico
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
   };

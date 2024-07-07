@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { TextField, InputAdornment, IconButton, Stack, Box, Alert } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
-import { useAuth } from '../../../AuthContext'; // Asegúrate de que esta ruta sea correcta
+import { useAuth } from '../../../AuthContext';
 import Iconify from '../../../components/iconify';
 
 export default function RegisterForm() {
   const navigate = useNavigate();
-  const { handleRegister, handleLogin } = useAuth(); // Usa el hook useAuth para acceder a las funciones de autenticación
+  const { handleRegister, handleLogin } = useAuth();
 
   const [showPassword, setShowPassword] = useState(false);
   const [name, setName] = useState('');
@@ -24,8 +24,8 @@ export default function RegisterForm() {
       if (success.status === 400) {
         setGeneralError(success.message);
       } else if (success) {
-        await handleLogin(email, password); // Iniciar sesión automáticamente después del registro
-        navigate('/peliculas', { replace: true }); // Redirigir a la página de películas después del registro
+        await handleLogin(email, password);
+        navigate('/peliculas', { replace: true });
       }
     }
   };
@@ -69,7 +69,6 @@ export default function RegisterForm() {
   };
 
   const isValidEmail = (email) => {
-    // Expresión regular para validar el formato de correo electrónico
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
   };

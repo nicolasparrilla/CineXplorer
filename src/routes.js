@@ -10,6 +10,7 @@ import MoviesPage from './pages/MoviesPage';
 import Inicio from './pages/Inicio';
 import MovieDetailPage from './pages/MovieDetailPage';
 import PassRecovery from './pages/RecoverPassword';
+import ResetPassword from './pages/ResetPassword';
 import RegisterPage from './pages/RegisterPage';
 
 // ----------------------------------------------------------------------
@@ -34,6 +35,10 @@ export default function Router() {
     { 
       path: 'forgotpassword',
       element: <PassRecovery />,
+    },
+    {
+      path: 'recupero',
+      element: <ResetPassword />,
     },
     {
       path: 'register',

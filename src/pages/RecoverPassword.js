@@ -3,22 +3,13 @@ import { useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { Container, Typography, TextField, Button, Box, Link, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Stack } from '@mui/material';
 import { styled } from '@mui/system';
+import axios from 'axios';
 import Logo from '../components/logo';
 
 const StyledRoot = styled('div')(({ theme }) => ({
   [theme.breakpoints.up('md')]: {
     display: 'flex',
   },
-}));
-
-const StyledSection = styled('div')(({ theme }) => ({
-  width: '100%',
-  maxWidth: 480,
-  display: 'flex',
-  flexDirection: 'column',
-  justifyContent: 'center',
-  boxShadow: theme.customShadows.card,
-  backgroundColor: theme.palette.background.default,
 }));
 
 const StyledContent = styled('div')(({ theme }) => ({
@@ -45,7 +36,6 @@ const StyledContent2 = styled('div')(({ theme }) => ({
 
 export default function PassRecovery() {
   const [email, setEmail] = useState('');
-  const [openDialog, setOpenDialog] = useState(false);
   const [state, setState ] = useState(true);
   const [error, setError] = useState('');
   const navigate = useNavigate();
@@ -54,23 +44,23 @@ export default function PassRecovery() {
     setEmail(event.target.value);
   };
 
-  const handleCloseDialog = () => {
-    setOpenDialog(false);
-  };
-
-  const handleSubmit = (event) => {
-    event.preventDefault(); // Prevent form submission
+  const handleSubmit = async (event) => {
+    event.preventDefault();
     if (email.trim() === '') {
       setError('El campo de correo electrónico no puede estar vacío.');
     } else if (!isValidEmail(email)) {
       setError('Debe ingresar una dirección de email válida.');
     } else {
-      setState(false); // Email is valid, change state
+      try {
+        const response = await axios.post('http://localhost:4000/api/users/forgot-password', { email });
+        setState(false);
+      } catch (error) {
+        setError('Hubo un error al enviar el correo. Por favor, intente nuevamente.');
+      }
     }
   };
 
   const isValidEmail = (email) => {
-    // Basic email format validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
   };

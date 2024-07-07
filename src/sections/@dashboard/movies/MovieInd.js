@@ -7,19 +7,17 @@ import { styled, alpha } from '@mui/material/styles';
 import Iconify from '../../../components/iconify';
 import { useAuth } from '../../../AuthContext';
 
-// Estilo personalizado para el modal
 const CustomModal = styled(Modal)(({ theme }) => ({
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
 }));
 
-// Estilo personalizado para el botón de favoritos
 const StyledFavoriteButton = styled(IconButton)(({ theme }) => ({
-  backgroundColor: alpha(theme.palette.grey[800], 0.7), // Ajusta la opacidad del fondo del botón
+  backgroundColor: alpha(theme.palette.grey[800], 0.7),
   color: theme.palette.grey[800],
   '&:hover': {
-    backgroundColor: alpha(theme.palette.grey[800], 0.9), // Ajusta la opacidad al pasar el ratón sobre el botón
+    backgroundColor: alpha(theme.palette.grey[800], 0.9),
   },
   '&.added': {
     '& svg': {
@@ -29,7 +27,6 @@ const StyledFavoriteButton = styled(IconButton)(({ theme }) => ({
 }));
 
 const MovieInd = ({ id, title, cover, rate, description, director, language, createdAt, genres, cast }) => {
-  // Formatear la fecha en el formato DD/MM/AAAA
   const formattedDate = createdAt.toLocaleDateString('es-ES');
 
   const [open, setOpen] = useState(false);
@@ -53,7 +50,7 @@ const MovieInd = ({ id, title, cover, rate, description, director, language, cre
         });
         const userLists = response.data.data;
 
-        setMovieLists(userLists); // Establecer las listas de películas del usuario
+        setMovieLists(userLists);
       } catch (error) {
         console.error('Error fetching user lists:', error);
       }
@@ -62,18 +59,15 @@ const MovieInd = ({ id, title, cover, rate, description, director, language, cre
     fetchUserLists();
   }, [authState]);
 
-  useEffect(() => {
-    if (openAddIdModal && selectedMovieId !== null) {
-      const selectedListsForMovie = movieLists
-        .filter(list => list.idMovies.includes(selectedMovieId.toString()))
-        .map(list => list.title);
-      setSelectedLists(selectedListsForMovie);
-    }
-  }, [openAddIdModal, selectedMovieId, movieLists]);
-
   const handleOpenAddIdModal = (movieId) => {
     setOpenAddIdModal(true);
     setSelectedMovieId(movieId);
+    if (movieLists) {
+      const selectedListsForMovie = movieLists
+        .filter(list => list.idMovies.includes(movieId.toString()))
+        .map(list => list.title);
+      setSelectedLists(selectedListsForMovie);
+    }
   };
 
   const handleCloseAddIdModal = () => {
@@ -95,13 +89,12 @@ const MovieInd = ({ id, title, cover, rate, description, director, language, cre
   
     Promise.all(addMoviePromises)
       .then(() => {
-        const updatedLists = [...movieLists];
-        selectedLists.forEach(listTitle => {
-          const listIndex = updatedLists.findIndex(list => list.title === listTitle);
-          if (listIndex !== -1) {
-            updatedLists[listIndex].idMovies.push(selectedMovieId.toString());
-          }
-        });
+        const updatedLists = movieLists.map(list => ({
+          ...list,
+          idMovies: selectedLists.includes(list.title)
+            ? [...new Set([...list.idMovies, selectedMovieId.toString()])]
+            : list.idMovies.filter(id => id !== selectedMovieId.toString())
+        }));
   
         setMovieLists(updatedLists);
         setOpenAddIdModal(false);
@@ -110,6 +103,8 @@ const MovieInd = ({ id, title, cover, rate, description, director, language, cre
         setError('');
       })
       .catch(error => {
+        console.error('Error al actualizar las listas:', error);
+        setError('Error al actualizar las listas.');
         setOpenAddIdModal(false);
       });
   };
@@ -139,12 +134,12 @@ const MovieInd = ({ id, title, cover, rate, description, director, language, cre
   
         await axios.post('http://localhost:4000/api/users/lists/removeMovie', data);
   
-        const listIndex = updatedLists.findIndex(list => list === value);
-        if (listIndex !== -1) {
-          const movieIds = movieLists[listIndex].idMovies.filter(id => id !== selectedMovieId.toString());
-          movieLists[listIndex].idMovies = movieIds;
-          setMovieLists([...movieLists]);
-        }
+        const updatedMovieLists = movieLists.map(list => 
+          list.title === value 
+            ? { ...list, idMovies: list.idMovies.filter(id => id !== selectedMovieId.toString()) }
+            : list
+        );
+        setMovieLists(updatedMovieLists);
       } catch (error) {
         console.error('Error al eliminar película de la lista:', error);
         setError('Error al eliminar película de la lista.');
@@ -259,7 +254,7 @@ const MovieInd = ({ id, title, cover, rate, description, director, language, cre
                         <FormControl component="fieldset" sx={{ mb: 2 }}>
                           {movieLists && movieLists.map((list) => (
                             <FormControlLabel
-                              key={list.title}
+                              key={list._id}
                               control={<Checkbox checked={selectedLists.includes(list.title)} onChange={handleListChange} value={list.title} />}
                               label={list.title}
                             />

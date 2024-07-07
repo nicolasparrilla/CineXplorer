@@ -1,30 +1,12 @@
 import PropTypes from 'prop-types';
-import { set, sub } from 'date-fns';
 import { noCase } from 'change-case';
-import { faker } from '@faker-js/faker';
 import { useState } from 'react';
 // @mui
-import {
-  Box,
-  List,
-  Badge,
-  Button,
-  Avatar,
-  Tooltip,
-  Divider,
-  Popover,
-  Typography,
-  IconButton,
-  ListItemText,
-  ListSubheader,
-  ListItemAvatar,
-  ListItemButton,
-} from '@mui/material';
+import { Box, Badge, Avatar, Popover, Typography, IconButton, ListItemText, ListItemAvatar, ListItemButton } from '@mui/material';
 // utils
 import { fToNow } from '../../../utils/formatTime';
 // components
 import Iconify from '../../../components/iconify';
-import Scrollbar from '../../../components/scrollbar';
 
 // ----------------------------------------------------------------------
 

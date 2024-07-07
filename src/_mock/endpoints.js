@@ -31,7 +31,4 @@ http://localhost:4000/api/users/lists/
 {
     "userId": "6677afbc070e2a3bc00e6a28"
 }
-
-TODAS LAS SOLICITUDES SON POST
-
 */

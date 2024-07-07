@@ -1,8 +1,8 @@
 import axios from 'axios';
 
-const API_KEY = '0b380e08eb58960542b5d6fdc0dc4974'; // Reemplaza esto con tu clave de API de TMDB
+const API_KEY = '0b380e08eb58960542b5d6fdc0dc4974';
 const BASE_URL = 'https://api.themoviedb.org/3';
-const IMAGE_BASE_URL = 'https://image.tmdb.org/t/p'; // URL base para las imágenes de TMDB
+const IMAGE_BASE_URL = 'https://image.tmdb.org/t/p';
 
 const GENRE_MAP = {
   'Acción': 28,
@@ -102,7 +102,7 @@ export const searchMoviesByDirector = async (directorName, page = 1) => {
       },
     });
 
-    const directorId = response.data.results[0]?.id; // Tomamos el primer resultado de la búsqueda del director
+    const directorId = response.data.results[0]?.id;
     if (!directorId) {
       return [];
     }
@@ -132,7 +132,7 @@ export const searchMoviesByActor = async (actorName, page = 1) => {
       },
     });
 
-    const actorId = response.data.results[0]?.id; // Tomamos el primer resultado de la búsqueda del actor
+    const actorId = response.data.results[0]?.id;
     if (!actorId) {
       return [];
     }

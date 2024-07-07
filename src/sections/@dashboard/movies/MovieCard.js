@@ -7,7 +7,6 @@ import PropTypes from 'prop-types';
 import { Card, CardContent, Grid, Typography, Modal, Box, Button, FormControl, FormControlLabel, Checkbox } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import Iconify from '../../../components/iconify';
-import { fDate } from '../../../utils/formatTime';
 import { useAuth } from '../../../AuthContext';
 import { getImageUrl } from '../../../tmdbService';
 
@@ -60,18 +59,14 @@ const StyledCover = styled('img')({
 const MovieCard = ({ movie, index }) => {
   const { id, title, overview, poster_path, release_date, vote_average } = movie;
   const { isLoggedIn, authState } = useAuth();
-
-  // URL y estructura de la solicitud POST para agregar película a lista
   const addMovieToListUrl = 'http://localhost:4000/api/users/lists/addMovie';
 
-  // Estados locales
   const [movieLists, setMovieLists] = useState(null);
   const [openAddIdModal, setOpenAddIdModal] = useState(false);
   const [selectedLists, setSelectedLists] = useState([]);
   const [selectedMovieId, setSelectedMovieId] = useState(null);
   const [error, setError] = useState('');
 
-  // Efecto para obtener las listas de películas del usuario
   useEffect(() => {
     const fetchUserLists = async () => {
       if (!authState || !isLoggedIn) return;
@@ -82,7 +77,7 @@ const MovieCard = ({ movie, index }) => {
         });
         const userLists = response.data.data;
 
-        setMovieLists(userLists); // Establecer las listas de películas del usuario
+        setMovieLists(userLists);
       } catch (error) {
         console.error('Error fetching user lists:', error);
       }
@@ -91,9 +86,8 @@ const MovieCard = ({ movie, index }) => {
     fetchUserLists();
   }, [authState, isLoggedIn]);
 
-  // Efecto para manejar la apertura del modal y la selección de listas para la película
   useEffect(() => {
-    if (openAddIdModal && selectedMovieId !== null) {
+    if (openAddIdModal && selectedMovieId !== null && movieLists) {
       const selectedListsForMovie = movieLists
         .filter(list => list.idMovies.includes(selectedMovieId.toString()))
         .map(list => list.title);
@@ -101,13 +95,11 @@ const MovieCard = ({ movie, index }) => {
     }
   }, [openAddIdModal, selectedMovieId, movieLists]);
 
-  // Función para abrir el modal y establecer la película seleccionada
   const handleOpenAddIdModal = (movieId) => {
     setOpenAddIdModal(true);
     setSelectedMovieId(movieId);
   };
 
-  // Función para cerrar el modal y guardar la película en las listas seleccionadas
   const handleCloseAddIdModal = () => {
     const addMoviePromises = selectedLists.map(listTitle => {
       const selectedList = movieLists.find(list => list.title === listTitle);
@@ -127,38 +119,34 @@ const MovieCard = ({ movie, index }) => {
   
     Promise.all(addMoviePromises)
       .then(() => {
-        // Actualizar las listas después de agregar la película
-        const updatedLists = [...movieLists];
-        selectedLists.forEach(listTitle => {
-          const listIndex = updatedLists.findIndex(list => list.title === listTitle);
-          if (listIndex !== -1) {
-            updatedLists[listIndex].idMovies.push(selectedMovieId.toString());
-          }
-        });
+        const updatedLists = movieLists.map(list => ({
+          ...list,
+          idMovies: selectedLists.includes(list.title)
+            ? [...new Set([...list.idMovies, selectedMovieId.toString()])]
+            : list.idMovies.filter(id => id !== selectedMovieId.toString())
+        }));
   
         setMovieLists(updatedLists);
-        setOpenAddIdModal(false); // Cerrar el modal después de guardar
-        setSelectedLists([]); // Limpiar la selección de listas
-        setSelectedMovieId(null); // Limpiar la película seleccionada
-        setError(''); // Limpiar cualquier error previo
+        setOpenAddIdModal(false);
+        setSelectedLists([]);
+        setSelectedMovieId(null);
+        setError('');
       })
       .catch(error => {
-        setOpenAddIdModal(false); // Cerrar el modal después de guardar
+        console.error('Error al actualizar las listas:', error);
+        setError('Error al actualizar las listas.');
+        setOpenAddIdModal(false);
       });
   };
 
-  // Función para manejar el cambio en la selección de listas
   const handleListChange = async (event) => {
     const { value, checked } = event.target;
-  
-    // Clonar el estado actual de selectedLists
+
     let updatedLists = [...selectedLists];
-  
-    // Si está marcado el checkbox, agregar película a la lista
+
     if (checked) {
       updatedLists.push(value);
     } else {
-      // Si está desmarcado el checkbox, remover película de la lista
       updatedLists = updatedLists.filter(list => list !== value);
   
       try {
@@ -173,28 +161,24 @@ const MovieCard = ({ movie, index }) => {
           listId: selectedList._id,
           movieId: selectedMovieId.toString()
         };
-  
-        // Llamar al endpoint para eliminar la película de la lista
+
         await axios.post('http://localhost:4000/api/users/lists/removeMovie', data);
-  
-        // Actualizar el estado local de listas después de eliminar la película
-        const listIndex = updatedLists.findIndex(list => list === value);
-        if (listIndex !== -1) {
-          const movieIds = movieLists[listIndex].idMovies.filter(id => id !== selectedMovieId.toString());
-          movieLists[listIndex].idMovies = movieIds;
-          setMovieLists([...movieLists]);
-        }
+
+        const updatedMovieLists = movieLists.map(list => 
+          list.title === value 
+            ? { ...list, idMovies: list.idMovies.filter(id => id !== selectedMovieId.toString()) }
+            : list
+        );
+        setMovieLists(updatedMovieLists);
       } catch (error) {
         console.error('Error al eliminar película de la lista:', error);
         setError('Error al eliminar película de la lista.');
       }
     }
-  
-    // Actualizar el estado de selectedLists después de todos los cambios
+
     setSelectedLists(updatedLists);
   };
 
-  // Función para formatear la fecha
   const formatDate = dateString => {
     if (!dateString) {
       return 'Fecha desconocida';
@@ -209,16 +193,14 @@ const MovieCard = ({ movie, index }) => {
     return 'Fecha inválida';
   };
 
-  // Función para formatear la calificación
   const formatRating = rating => {
     if (rating === null || rating === undefined) {
       return 'N/A';
     }
 
-    return Math.round(rating * 10); // Convierte la calificación a un entero de dos cifras
+    return Math.round(rating * 10);
   };
 
-  // Función para manejar el clic en el blog
   const handleBlogClick = () => {
     console.log('ID del blog:', movie.id);
     console.log('Título del blog:', title);
@@ -360,4 +342,3 @@ MovieCard.propTypes = {
 };
 
 export default MovieCard;
-

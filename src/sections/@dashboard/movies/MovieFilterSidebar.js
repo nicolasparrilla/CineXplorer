@@ -1,18 +1,6 @@
 import PropTypes from 'prop-types';
 import { useState, useEffect } from 'react';
-import {
-  Box,
-  Stack,
-  Button,
-  Drawer,
-  Divider,
-  IconButton,
-  Typography,
-  Slider,
-  MenuItem,
-  Select,
-  TextField,
-} from '@mui/material';
+import { Box, Stack, Button, Drawer, Divider, IconButton, Typography, Slider, MenuItem, Select, TextField } from '@mui/material';
 import Iconify from '../../../components/iconify';
 import Scrollbar from '../../../components/scrollbar';
 

@@ -1,15 +1,15 @@
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Grid, Button, Container, Typography } from '@mui/material';
-import { useNavigate } from 'react-router-dom'; // Importa useNavigate
+import { useNavigate } from 'react-router-dom';
 import useResponsive from '../hooks/useResponsive';
 
 export default function Inicio() {
-  const navigate = useNavigate(); // Obtiene la función de navegación
+  const navigate = useNavigate();
   const isDesktop = useResponsive('up', 'lg');
 
   const handleDiscoverMovies = () => {
-    navigate('/peliculas'); // Redirige a la página de películas al hacer clic en el botón
+    navigate('/peliculas');
   };
 
   return (

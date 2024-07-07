@@ -72,7 +72,7 @@ export default function LoginPage() {
               <img
                 src="/assets/illustrations/Cinema-Transparent2.png"
                 alt="login"
-                style={{ width: '100%', height: 'auto' }} // Establecer el ancho al 100% y altura automática
+                style={{ width: '100%', height: 'auto' }}
               />
             </Box>
           </StyledSection>

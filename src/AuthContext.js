@@ -12,17 +12,17 @@ export function AuthProvider({ children }) {
   const handleLogin = async (email, password) => {
     try {
       const response = await axios.post('http://localhost:4000/api/users/login', { email, password });
-      const user = response.data.loginUser.user; // Extraer el objeto del usuario
+      const user = response.data.loginUser.user;
       const token = response.data.token;
 
       localStorage.setItem('authUser', JSON.stringify(user));
       localStorage.setItem('authToken', token);
 
-      setAuthState(user); // Guardar solo el objeto de usuario en el estado
+      setAuthState(user);
       console.log('Login successful', response.data);
-      console.log('User ID:', user._id); // Imprimir el ID del usuario
-      console.log('User Email:', user.email); // Imprimir el correo electrónico del usuario
-      console.log('User name:', user.name); // Imprimir el nombre del usuario
+      console.log('User ID:', user._id);
+      console.log('User Email:', user.email);
+      console.log('User name:', user.name);
       return true;
     } catch (error) {
       console.error('Login failed', error);
@@ -38,15 +38,12 @@ export function AuthProvider({ children }) {
         password
       });
 
-      const user = response.data.createdUser; // Extraer el objeto del usuario creado
+      const user = response.data.createdUser;
 
       localStorage.setItem('authUser', JSON.stringify(user));
 
-      setAuthState(user); // Guardar solo el objeto de usuario en el estado
+      setAuthState(user);
       console.log('Registration successful', response.data);
-      console.log('User ID:', user._id); // Imprimir el ID del usuario
-      console.log('User Email:', user.email); // Imprimir el correo electrónico del usuario
-      console.log('User name:', user.name); // Imprimir el nombre del usuario
       localStorage.removeItem('movieFilters');
       return { status: 200 };
     } catch (error) {
@@ -56,9 +53,9 @@ export function AuthProvider({ children }) {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('authUser'); // Limpiar el usuario autenticado del localStorage
+    localStorage.removeItem('authUser');
     localStorage.removeItem('movieFilters');
-    setAuthState(null); // Establecer el estado de autenticación como null
+    setAuthState(null);
     window.location.reload();
   };
 

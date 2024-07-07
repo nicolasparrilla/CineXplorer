@@ -10,7 +10,6 @@ import useResponsive from '../../../hooks/useResponsive';
 import Logo from '../../../components/logo';
 import Scrollbar from '../../../components/scrollbar';
 import NavSection from '../../../components/nav-section';
-// importa los dos conjuntos de configuraciones de navegación
 import navConfig from './config';
 import navConfigLogged from './configLogged';
 import { useAuth } from '../../../AuthContext';
@@ -45,7 +44,6 @@ export default function Nav({ openNav, onCloseNav }) {
     }
   }, [pathname]);
 
-  // Determinar qué conjunto de configuración de navegación usar según el estado de autenticación
   const currentNavConfig = isLoggedIn ? navConfigLogged : navConfig;
 
   const renderContent = (
@@ -100,7 +98,7 @@ export default function Nav({ openNav, onCloseNav }) {
           PaperProps={{
             sx: {
               width: NAV_WIDTH,
-              bgcolor: '#121212', // Cambiar el color de fondo aquí
+              bgcolor: '#121212',
               borderRightStyle: 'dashed',
             },
           }}

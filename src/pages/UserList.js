@@ -5,15 +5,10 @@ import { Helmet } from 'react-helmet-async';
 import { filter } from 'lodash';
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import {
-  Button, Card, Table, Stack, Popover, Checkbox, TableRow, MenuItem, TableBody, TableCell, Container,
-  Typography, IconButton, TableContainer, TablePagination
-} from '@mui/material';
-import Iconify from '../components/iconify';
+import { Button, Card, Table, Stack, Checkbox, TableRow, TableBody, TableCell, Container, Typography, TableContainer, TablePagination } from '@mui/material';
 import Scrollbar from '../components/scrollbar';
-import { UserListHead, UserListToolbar } from '../sections/@dashboard/user';
-import { fetchMovieDetails, getImageUrl } from '../tmdbService'; // Importar funciones necesarias de tmdbService
-import useFetch from './useFetch';
+import { UserListHead } from '../sections/@dashboard/user';
+import { fetchMovieDetails, getImageUrl } from '../tmdbService';
 import { useAuth } from '../AuthContext';
 
 const TABLE_HEAD = [
@@ -102,16 +97,6 @@ export default function UserList() {
     fetchMoviesData();
   }, [listData]);
 
-  const handleOpenMenu = (event, movieId) => {
-    setOpen(event.currentTarget);
-    setSelectedMovieId(movieId);
-  };
-
-  const handleCloseMenu = () => {
-    setOpen(null);
-    setSelectedMovieId(null);
-  };
-
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
@@ -158,7 +143,6 @@ export default function UserList() {
 
   const handleDeleteMovie = async (movieId) => {
     try {
-      // Actualiza el backend
       const updatedList = {
         ...listData,
         idMovies: listData.idMovies.filter(id => id !== movieId.toString()),
@@ -173,16 +157,13 @@ export default function UserList() {
       if (response.status === 200) {
         console.log('Película eliminada de la lista correctamente.');
       }
-  
-      // Después de la confirmación del servidor, actualiza localmente
-      setListData(updatedList); // Actualiza listData con la nueva lista de películas
-  
-      // Actualiza moviesInList con la lista actualizada
+
+      setListData(updatedList);
+
       const updatedMovies = await Promise.all(updatedList.idMovies.map(id => fetchMovieDetails(id)));
       setMoviesInList(updatedMovies);
     } catch (error) {
       console.error('Error al eliminar la película:', error);
-      // Manejo de errores
     }
   };
 

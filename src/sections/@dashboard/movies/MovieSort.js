@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Menu, Button, MenuItem, Typography } from '@mui/material';
+import { Menu, Button, MenuItem } from '@mui/material';
 import Iconify from '../../../components/iconify';
 
 const SORT_BY_OPTIONS = [
@@ -59,4 +59,3 @@ export default function MovieSort({ setFilteredMovies }) {
     </>
   );
 }
-
