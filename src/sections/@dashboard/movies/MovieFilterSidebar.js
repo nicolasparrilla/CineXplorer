@@ -263,7 +263,7 @@ export default function MovieFilterSidebar({ openFilter, onOpenFilter, onCloseFi
           </Stack>
         </Scrollbar>
 
-        <Box sx={{ px: 3 }}>
+        <Box sx={{ px: 3, mt: 2 }}>
           <Button
             fullWidth
             size="large"
