@@ -54,6 +54,7 @@ export function AuthProvider({ children }) {
 
   const handleLogout = () => {
     localStorage.removeItem('authUser');
+    localStorage.removeItem('authToken');
     localStorage.removeItem('movieFilters');
     setAuthState(null);
     window.location.reload();
